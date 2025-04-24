@@ -1,1 +1,42 @@
-
+{
+  "name": "5g-emulator",
+  "version": "1.0.0",
+  "description": "A simplified 5G network emulator using SDN and Docker",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "package": "electron-builder --dir"
+  },
+  "author": "Netflux5g",
+  "license": "MIT",
+  "build": {
+    "appId": "com.netflux5g.5gemulator",
+    "productName": "5G Network Emulator",
+    "directories": {
+      "output": "dist"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Network"
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "mac": {
+      "target": ["dmg"]
+    }
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "bootstrap": "^5.2.0",
+    "cytoscape": "^3.22.1",
+    "jquery": "^3.6.0",
+    "popper.js": "^1.16.1"
+  },
+  "devDependencies": {
+    "electron": "^20.0.1",
+    "electron-builder": "^23.3.3",
+    "electron-reload": "^2.0.0-alpha.1"
+  }
+}
