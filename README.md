@@ -1013,3 +1013,4 @@ Change to `docker/ran` directory\
         # Start API server
         app.run(host='0.0.0.0', port=80) 
     ```
+### 3. Create User Equipment (UE) Component
