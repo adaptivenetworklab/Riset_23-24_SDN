@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  # 5G Core Network Components
+  nrf:
+    build: ./docker/core-network/nrf
+    networks:
+      - 5g_core
+    ports:
+      - "8080:80"
+
+  amf:
+    build: ./docker/core-network/amf
+    networks:
+      - 5g_core
+    depends_on:
+      - nrf
+    ports:
+      - "8081:80"
+
+  smf:
+    build: ./docker/core-network/smf
+    networks:
+      - 5g_core
+    depends_on:
+      - nrf
+    ports:
+      - "8082:80"
+
+  upf:
+    build: ./docker/core-network/upf
+    networks:
+      - 5g_core
+    depends_on:
+      - smf
+    ports:
+      - "8083:80"
+
+  # RAN Components
+  gnb:
+    build: ./docker/ran
+    networks:
+      - 5g_core
+      - 5g_ran
+    depends_on:
+      - amf
+    environment:
+      - GNB_ID=gnb-001
+      - AMF_ADDRESS=amf
+    ports:
+      - "8084:80"
+
+  # User Equipment
+  ue:
+    build: ./docker/ue
+    networks:
+      - 5g_ran
+    depends_on:
+      - gnb
+    environment:
+      - IMSI=001010123456789
+      - GNB_ADDRESS=gnb
+    ports:
+      - "8085:80"
+
+networks:
+  5g_core:
+    driver: bridge
+  5g_ran:
+    driver: bridge
