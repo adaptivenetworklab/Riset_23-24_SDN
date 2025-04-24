@@ -64,3 +64,104 @@ mkdir -p app/{css,js,assets}
 
 ## Part 2: Network Component Development
 ### 1. Create 5G Core Network Components
+- AMF (Access and Mobility Management Function)
+  - Dockerfile (docker/core-network/amf/Dockerfile)\
+    Create Docker File
+    ```
+    touch Dockerfile
+    ```
+    Edit Docker File
+    ```
+    nano Dockerfile
+    ```
+    Dockerfile Configuration
+    ```
+    FROM ubuntu:20.04
+  
+    RUN apt-get update && apt-get install -y \
+        iproute2 \
+        iputils-ping \
+        net-tools \
+        iptables \
+        tcpdump \
+        python3 \
+        python3-pip \
+        && pip3 install flask
+  
+    WORKDIR /app
+  
+    COPY amf.py /app/
+  
+    EXPOSE 38412/sctp 80/tcp
+  
+    CMD ["python3", "amf.py"]
+    ```
+  - Python Script (docker/core-network/amf/amf.py)
+    Create Python File
+    ```
+    touch amf.py
+    ```
+    Edit Python File
+    ```
+    nano amf.py
+    ```
+    Python File Configuration
+    ```
+    from flask import Flask, jsonify, request
+    import os
+    import json
+    import time
+    import threading
+    import socket
+    
+    app = Flask(__name__)
+    
+    # Store connected UEs and gNBs
+    connected_gnbs = {}
+    registered_ues = {}
+    
+    @app.route('/status', methods=['GET'])
+    def get_status():
+        return jsonify({
+            'status': 'running',
+            'component': 'AMF',
+            'connected_gnbs': len(connected_gnbs),
+            'registered_ues': len(registered_ues)
+        })
+    
+    @app.route('/gnb/register', methods=['POST'])
+    def register_gnb():
+        data = request.json
+        gnb_id = data.get('gnb_id')
+        if not gnb_id:
+            return jsonify({'error': 'gnb_id is required'}), 400
+    
+        connected_gnbs[gnb_id] = {
+            'ip': data.get('ip', '0.0.0.0'),
+            'connected_at': time.time(),
+            'status': 'connected'
+        }
+        return jsonify({'status': 'connected', 'gnb_id': gnb_id})
+    
+    @app.route('/ue/register', methods=['POST'])
+    def register_ue():
+        data = request.json
+        imsi = data.get('imsi')
+        gnb_id = data.get('gnb_id')
+    
+        if not imsi or not gnb_id:
+            return jsonify({'error': 'imsi and gnb_id are required'}), 400
+    
+        if gnb_id not in connected_gnbs:
+            return jsonify({'error': 'Unknown gNB'}), 404
+    
+        registered_ues[imsi] = {
+            'gnb_id': gnb_id,
+            'registered_at': time.time(),
+            'status': 'registered'
+        }
+        return jsonify({'status': 'registered', 'imsi': imsi})
+    
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=80)
+    ```
