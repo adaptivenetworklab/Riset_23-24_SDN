@@ -63,6 +63,16 @@ services:
     ports:
       - "8085:80"
 
+  # SDN Controller
+  sdn-controller:
+    build: ./docker/sdn-controller
+    networks:
+      - 5g_core
+      - 5g_ran
+    ports:
+      - "6633:6633"
+      - "8086:8080"
+
 networks:
   5g_core:
     driver: bridge
