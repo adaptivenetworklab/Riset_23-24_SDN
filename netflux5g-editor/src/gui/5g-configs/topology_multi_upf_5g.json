@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "name": "Multi-UPF 5G Network",
+    "description": "Advanced 5G topology with multiple UPFs for different DNNs",
+    "version": "1.0",
+    "created": "2024-01-01"
+  },
+  "components": [
+    {
+      "id": "amf1",
+      "type": "VGcore",
+      "name": "AMF-1",
+      "x": 400,
+      "y": 100,
+      "properties": {
+        "Component5G_Type": "AMF",
+        "Component5G_Name": "amf1",
+        "Component5G_Image": "adaptive/open5gs:1.0",
+        "Component5G_ConfigFile": "amf.yaml"
+      }
+    },
+    {
+      "id": "smf1",
+      "type": "VGcore",
+      "name": "SMF-1",
+      "x": 300,
+      "y": 200,
+      "properties": {
+        "Component5G_Type": "SMF",
+        "Component5G_Name": "smf1",
+        "Component5G_Image": "adaptive/open5gs:1.0",
+        "Component5G_ConfigFile": "smf.yaml"
+      }
+    },
+    {
+      "id": "upf1",
+      "type": "VGcore",
+      "name": "UPF-Internet",
+      "x": 200,
+      "y": 300,
+      "properties": {
+        "Component5G_Type": "UPF",
+        "Component5G_Name": "upf1",
+        "Component5G_Image": "adaptive/open5gs:1.0",
+        "Component5G_ConfigFile": "upf.yaml"
+      }
+    },
+    {
+      "id": "upf2",
+      "type": "VGcore",
+      "name": "UPF-Web",
+      "x": 600,
+      "y": 300,
+      "properties": {
+        "Component5G_Type": "UPF",
+        "Component5G_Name": "upf2",
+        "Component5G_Image": "adaptive/open5gs:1.0",
+        "Component5G_ConfigFile": "upf2.yaml"
+      }
+    },
+    {
+      "id": "gnb1",
+      "type": "GNB",
+      "name": "gNB-Campus",
+      "x": 200,
+      "y": 450,
+      "properties": {
+        "GNB_Hostname": "gnb1.campus.local",
+        "GNB_AMF_IP": "10.0.0.3",
+        "GNB_MCC": "999",
+        "GNB_MNC": "70",
+        "GNB_SST": "1",
+        "GNB_SD": "0xffffff",
+        "GNB_TAC": "1",
+        "GNB_CellID": "0x19b",
+        "GNB_Power": "30"
+      }
+    },
+    {
+      "id": "gnb2",
+      "type": "GNB",
+      "name": "gNB-Enterprise",
+      "x": 600,
+      "y": 450,
+      "properties": {
+        "GNB_Hostname": "gnb2.enterprise.local",
+        "GNB_AMF_IP": "10.0.0.3",
+        "GNB_MCC": "999",
+        "GNB_MNC": "70",
+        "GNB_SST": "1",
+        "GNB_SD": "0xffffff",
+        "GNB_TAC": "2",
+        "GNB_CellID": "0x19c",
+        "GNB_Power": "30"
+      }
+    },
+    {
+      "id": "ue1",
+      "type": "UE",
+      "name": "UE-Student",
+      "x": 100,
+      "y": 550,
+      "properties": {
+        "UE_IMSI": "999700000000001",
+        "UE_MCC": "999",
+        "UE_MNC": "70",
+        "UE_KEY": "465B5CE8B199B49FAA5F0A2EE238A6BC",
+        "UE_OPType": "OPC",
+        "UE_OP": "E8ED289DEBA952E4283B54E88E6183CA",
+        "UE_AMFHostname": "amf1.test.local",
+        "UE_GNB_IP": "10.0.0.4",
+        "UE_APN": "internet"
+      }
+    },
+    {
+      "id": "ue2",
+      "type": "UE",
+      "name": "UE-Faculty",
+      "x": 300,
+      "y": 550,
+      "properties": {
+        "UE_IMSI": "999700000000002",
+        "UE_MCC": "999",
+        "UE_MNC": "70",
+        "UE_KEY": "465B5CE8B199B49FAA5F0A2EE238A6BC",
+        "UE_OPType": "OPC",
+        "UE_OP": "E8ED289DEBA952E4283B54E88E6183CA",
+        "UE_AMFHostname": "amf1.test.local",
+        "UE_GNB_IP": "10.0.0.4",
+        "UE_APN": "internet2"
+      }
+    },
+    {
+      "id": "ue3",
+      "type": "UE",
+      "name": "UE-Enterprise1",
+      "x": 500,
+      "y": 550,
+      "properties": {
+        "UE_IMSI": "999700000000003",
+        "UE_MCC": "999",
+        "UE_MNC": "70",
+        "UE_KEY": "465B5CE8B199B49FAA5F0A2EE238A6BC",
+        "UE_OPType": "OPC",
+        "UE_OP": "E8ED289DEBA952E4283B54E88E6183CA",
+        "UE_AMFHostname": "amf1.test.local",
+        "UE_GNB_IP": "10.0.0.5",
+        "UE_APN": "web1"
+      }
+    },
+    {
+      "id": "ue4",
+      "type": "UE",
+      "name": "UE-Enterprise2",
+      "x": 700,
+      "y": 550,
+      "properties": {
+        "UE_IMSI": "999700000000004",
+        "UE_MCC": "999",
+        "UE_MNC": "70",
+        "UE_KEY": "465B5CE8B199B49FAA5F0A2EE238A6BC",
+        "UE_OPType": "OPC",
+        "UE_OP": "E8ED289DEBA952E4283B54E88E6183CA",
+        "UE_AMFHostname": "amf1.test.local",
+        "UE_GNB_IP": "10.0.0.5",
+        "UE_APN": "web2"
+      }
+    },
+    {
+      "id": "switch1",
+      "type": "Switch",
+      "name": "Core-Switch",
+      "x": 400,
+      "y": 200,
+      "properties": {
+        "Switch_Name": "core_switch",
+        "Switch_DPID": "0000000000000001"
+      }
+    },
+    {
+      "id": "controller1",
+      "type": "Controller",
+      "name": "SDN-Controller",
+      "x": 400,
+      "y": 50,
+      "properties": {
+        "Controller_Name": "sdn_ctrl",
+        "Controller_IPAddress": "127.0.0.1",
+        "Controller_Port": "6633"
+      }
+    }
+  ],
+  "links": [
+    {
+      "id": "link1",
+      "source": "amf1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link2",
+      "source": "smf1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link3",
+      "source": "upf1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link4",
+      "source": "upf2",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link5",
+      "source": "gnb1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link6",
+      "source": "gnb2",
+      "destination": "switch1",
+      "type": "wired"
+    }
+  ]
+}

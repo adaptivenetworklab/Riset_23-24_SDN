@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "name": "Simple 5G Standalone Network",
+    "description": "Basic 5G SA topology with one UPF, one gNB, and two UEs",
+    "version": "1.0",
+    "created": "2024-01-01"
+  },
+  "components": [
+    {
+      "id": "amf1",
+      "type": "VGcore",
+      "name": "AMF-1",
+      "x": 400,
+      "y": 150,
+      "properties": {
+        "Component5G_Type": "AMF",
+        "Component5G_Name": "amf1",
+        "Component5G_Image": "adaptive/open5gs:1.0",
+        "Component5G_ConfigFile": "amf.yaml"
+      }
+    },
+    {
+      "id": "upf1",
+      "type": "VGcore",
+      "name": "UPF-1",
+      "x": 400,
+      "y": 300,
+      "properties": {
+        "Component5G_Type": "UPF",
+        "Component5G_Name": "upf1",
+        "Component5G_Image": "adaptive/open5gs:1.0",
+        "Component5G_ConfigFile": "upf.yaml"
+      }
+    },
+    {
+      "id": "gnb1",
+      "type": "GNB",
+      "name": "gNB-1",
+      "x": 200,
+      "y": 400,
+      "properties": {
+        "GNB_Hostname": "gnb1.test.local",
+        "GNB_AMF_IP": "10.0.0.3",
+        "GNB_MCC": "999",
+        "GNB_MNC": "70",
+        "GNB_SST": "1",
+        "GNB_SD": "0xffffff",
+        "GNB_TAC": "1",
+        "GNB_CellID": "0x19b",
+        "GNB_Power": "30"
+      }
+    },
+    {
+      "id": "ue1",
+      "type": "UE",
+      "name": "UE-1",
+      "x": 100,
+      "y": 500,
+      "properties": {
+        "UE_IMSI": "999700000000001",
+        "UE_MCC": "999",
+        "UE_MNC": "70",
+        "UE_KEY": "465B5CE8B199B49FAA5F0A2EE238A6BC",
+        "UE_OPType": "OPC",
+        "UE_OP": "E8ED289DEBA952E4283B54E88E6183CA",
+        "UE_AMFHostname": "amf1.test.local",
+        "UE_GNB_IP": "10.0.0.4",
+        "UE_APN": "internet"
+      }
+    },
+    {
+      "id": "ue2",
+      "type": "UE",
+      "name": "UE-2",
+      "x": 300,
+      "y": 500,
+      "properties": {
+        "UE_IMSI": "999700000000002",
+        "UE_MCC": "999",
+        "UE_MNC": "70",
+        "UE_KEY": "465B5CE8B199B49FAA5F0A2EE238A6BC",
+        "UE_OPType": "OPC",
+        "UE_OP": "E8ED289DEBA952E4283B54E88E6183CA",
+        "UE_AMFHostname": "amf1.test.local",
+        "UE_GNB_IP": "10.0.0.4",
+        "UE_APN": "internet"
+      }
+    },
+    {
+      "id": "switch1",
+      "type": "Switch",
+      "name": "S1",
+      "x": 400,
+      "y": 200,
+      "properties": {
+        "Switch_Name": "s1",
+        "Switch_DPID": "0000000000000001"
+      }
+    },
+    {
+      "id": "controller1",
+      "type": "Controller",
+      "name": "C1",
+      "x": 600,
+      "y": 100,
+      "properties": {
+        "Controller_Name": "c1",
+        "Controller_IPAddress": "127.0.0.1",
+        "Controller_Port": "6633"
+      }
+    }
+  ],
+  "links": [
+    {
+      "id": "link1",
+      "source": "amf1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link2",
+      "source": "upf1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link3",
+      "source": "gnb1",
+      "destination": "switch1",
+      "type": "wired"
+    }
+  ]
+}

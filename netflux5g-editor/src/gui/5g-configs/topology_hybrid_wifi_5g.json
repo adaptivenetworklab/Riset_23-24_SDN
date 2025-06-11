@@ -1,0 +1,261 @@
+{
+  "metadata": {
+    "name": "Hybrid WiFi-5G Network",
+    "description": "Mixed topology with WiFi APs, 5G components, and traditional hosts",
+    "version": "1.0",
+    "created": "2024-01-01"
+  },
+  "components": [
+    {
+      "id": "amf1",
+      "type": "VGcore",
+      "name": "AMF-Core",
+      "x": 400,
+      "y": 100,
+      "properties": {
+        "Component5G_Type": "AMF",
+        "Component5G_Name": "amf1",
+        "Component5G_Image": "adaptive/open5gs:1.0",
+        "Component5G_ConfigFile": "amf.yaml"
+      }
+    },
+    {
+      "id": "upf1",
+      "type": "VGcore",
+      "name": "UPF-Gateway",
+      "x": 400,
+      "y": 200,
+      "properties": {
+        "Component5G_Type": "UPF",
+        "Component5G_Name": "upf1",
+        "Component5G_Image": "adaptive/open5gs:1.0",
+        "Component5G_ConfigFile": "upf.yaml"
+      }
+    },
+    {
+      "id": "ap1",
+      "type": "AP",
+      "name": "WiFi-AP1",
+      "x": 200,
+      "y": 350,
+      "properties": {
+        "AP_SSID": "Campus-WiFi",
+        "AP_Channel": "36",
+        "AP_Mode": "a",
+        "AP_Range": "50",
+        "AP_Position": "200,350,0"
+      }
+    },
+    {
+      "id": "ap2",
+      "type": "AP",
+      "name": "WiFi-AP2",
+      "x": 600,
+      "y": 350,
+      "properties": {
+        "AP_SSID": "Enterprise-WiFi",
+        "AP_Channel": "44",
+        "AP_Mode": "a",
+        "AP_Range": "50",
+        "AP_Position": "600,350,0"
+      }
+    },
+    {
+      "id": "gnb1",
+      "type": "GNB",
+      "name": "5G-gNB",
+      "x": 400,
+      "y": 350,
+      "properties": {
+        "GNB_Hostname": "gnb1.hybrid.local",
+        "GNB_AMF_IP": "10.0.0.3",
+        "GNB_MCC": "999",
+        "GNB_MNC": "70",
+        "GNB_SST": "1",
+        "GNB_SD": "0xffffff",
+        "GNB_TAC": "1",
+        "GNB_CellID": "0x19b",
+        "GNB_Power": "30"
+      }
+    },
+    {
+      "id": "sta1",
+      "type": "STA",
+      "name": "Laptop-1",
+      "x": 150,
+      "y": 450,
+      "properties": {
+        "STA_Hostname": "laptop1",
+        "STA_IPAddress": "10.0.1.10",
+        "STA_MACAddress": "02:00:00:00:01:00",
+        "STA_SignalRange": "30"
+      }
+    },
+    {
+      "id": "sta2",
+      "type": "STA",
+      "name": "Tablet-1",
+      "x": 250,
+      "y": 450,
+      "properties": {
+        "STA_Hostname": "tablet1",
+        "STA_IPAddress": "10.0.1.11",
+        "STA_MACAddress": "02:00:00:00:01:01",
+        "STA_SignalRange": "30"
+      }
+    },
+    {
+      "id": "ue1",
+      "type": "UE",
+      "name": "5G-Phone1",
+      "x": 350,
+      "y": 450,
+      "properties": {
+        "UE_IMSI": "999700000000001",
+        "UE_MCC": "999",
+        "UE_MNC": "70",
+        "UE_KEY": "465B5CE8B199B49FAA5F0A2EE238A6BC",
+        "UE_OPType": "OPC",
+        "UE_OP": "E8ED289DEBA952E4283B54E88E6183CA",
+        "UE_AMFHostname": "amf1.hybrid.local",
+        "UE_GNB_IP": "10.0.0.4",
+        "UE_APN": "internet"
+      }
+    },
+    {
+      "id": "ue2",
+      "type": "UE",
+      "name": "5G-Phone2",
+      "x": 450,
+      "y": 450,
+      "properties": {
+        "UE_IMSI": "999700000000002",
+        "UE_MCC": "999",
+        "UE_MNC": "70",
+        "UE_KEY": "465B5CE8B199B49FAA5F0A2EE238A6BC",
+        "UE_OPType": "OPC",
+        "UE_OP": "E8ED289DEBA952E4283B54E88E6183CA",
+        "UE_AMFHostname": "amf1.hybrid.local",
+        "UE_GNB_IP": "10.0.0.4",
+        "UE_APN": "internet"
+      }
+    },
+    {
+      "id": "sta3",
+      "type": "STA",
+      "name": "Workstation-1",
+      "x": 550,
+      "y": 450,
+      "properties": {
+        "STA_Hostname": "workstation1",
+        "STA_IPAddress": "10.0.2.10",
+        "STA_MACAddress": "02:00:00:00:02:00",
+        "STA_SignalRange": "30"
+      }
+    },
+    {
+      "id": "sta4",
+      "type": "STA",
+      "name": "IoT-Device",
+      "x": 650,
+      "y": 450,
+      "properties": {
+        "STA_Hostname": "iot1",
+        "STA_IPAddress": "10.0.2.11",
+        "STA_MACAddress": "02:00:00:00:02:01",
+        "STA_SignalRange": "30"
+      }
+    },
+    {
+      "id": "host1",
+      "type": "Host",
+      "name": "Server-1",
+      "x": 100,
+      "y": 200,
+      "properties": {
+        "Host_Hostname": "server1",
+        "Host_IPAddress": "10.0.0.100",
+        "Host_MACAddress": "02:00:00:00:00:64"
+      }
+    },
+    {
+      "id": "host2",
+      "type": "Host",
+      "name": "Database",
+      "x": 700,
+      "y": 200,
+      "properties": {
+        "Host_Hostname": "database1",
+        "Host_IPAddress": "10.0.0.101",
+        "Host_MACAddress": "02:00:00:00:00:65"
+      }
+    },
+    {
+      "id": "switch1",
+      "type": "Switch",
+      "name": "Core-Switch",
+      "x": 400,
+      "y": 250,
+      "properties": {
+        "Switch_Name": "core_sw",
+        "Switch_DPID": "0000000000000001"
+      }
+    },
+    {
+      "id": "controller1",
+      "type": "Controller",
+      "name": "Hybrid-Controller",
+      "x": 400,
+      "y": 50,
+      "properties": {
+        "Controller_Name": "hybrid_ctrl",
+        "Controller_IPAddress": "127.0.0.1",
+        "Controller_Port": "6633"
+      }
+    }
+  ],
+  "links": [
+    {
+      "id": "link1",
+      "source": "amf1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link2",
+      "source": "upf1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link3",
+      "source": "ap1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link4",
+      "source": "ap2",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link5",
+      "source": "gnb1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link6",
+      "source": "host1",
+      "destination": "switch1",
+      "type": "wired"
+    },
+    {
+      "id": "link7",
+      "source": "host2",
+      "destination": "switch1",
+      "type": "wired"
+    }
+  ]
+}

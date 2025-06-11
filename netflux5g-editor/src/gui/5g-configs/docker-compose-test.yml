@@ -1,0 +1,212 @@
+version: '3.8'
+
+services:
+  # Core Network Services
+  mongodb:
+    image: mongo:4.4
+    container_name: test_mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - open5gs-test
+
+  nrf:
+    image: adaptive/open5gs:1.0
+    container_name: test_nrf
+    depends_on:
+      - mongodb
+    environment:
+      - DB_URI=mongodb://root:password@mongodb:27017/open5gs?authSource=admin
+    volumes:
+      - ./nrf.yaml:/opt/open5gs/etc/open5gs/nrf.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    command: ["./entrypoint.sh", "open5gs-nrfd"]
+    networks:
+      - open5gs-test
+
+  scp:
+    image: adaptive/open5gs:1.0
+    container_name: test_scp
+    depends_on:
+      - nrf
+    volumes:
+      - ./scp.yaml:/opt/open5gs/etc/open5gs/scp.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    command: ["./entrypoint.sh", "open5gs-scpd"]
+    networks:
+      - open5gs-test
+
+  ausf:
+    image: adaptive/open5gs:1.0
+    container_name: test_ausf
+    depends_on:
+      - scp
+    volumes:
+      - ./ausf.yaml:/opt/open5gs/etc/open5gs/ausf.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    command: ["./entrypoint.sh", "open5gs-ausfd"]
+    networks:
+      - open5gs-test
+
+  udm:
+    image: adaptive/open5gs:1.0
+    container_name: test_udm
+    depends_on:
+      - scp
+    volumes:
+      - ./udm.yaml:/opt/open5gs/etc/open5gs/udm.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    command: ["./entrypoint.sh", "open5gs-udmd"]
+    networks:
+      - open5gs-test
+
+  udr:
+    image: adaptive/open5gs:1.0
+    container_name: test_udr
+    depends_on:
+      - mongodb
+      - scp
+    environment:
+      - DB_URI=mongodb://root:password@mongodb:27017/open5gs?authSource=admin
+    volumes:
+      - ./udr.yaml:/opt/open5gs/etc/open5gs/udr.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    command: ["./entrypoint.sh", "open5gs-udrd"]
+    networks:
+      - open5gs-test
+
+  pcf:
+    image: adaptive/open5gs:1.0
+    container_name: test_pcf
+    depends_on:
+      - mongodb
+      - scp
+    environment:
+      - DB_URI=mongodb://root:password@mongodb:27017/open5gs?authSource=admin
+    volumes:
+      - ./pcf.yaml:/opt/open5gs/etc/open5gs/pcf.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    command: ["./entrypoint.sh", "open5gs-pcfd"]
+    networks:
+      - open5gs-test
+
+  nssf:
+    image: adaptive/open5gs:1.0
+    container_name: test_nssf
+    depends_on:
+      - scp
+    volumes:
+      - ./nssf.yaml:/opt/open5gs/etc/open5gs/nssf.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    command: ["./entrypoint.sh", "open5gs-nssfd"]
+    networks:
+      - open5gs-test
+
+  bsf:
+    image: adaptive/open5gs:1.0
+    container_name: test_bsf
+    depends_on:
+      - scp
+    volumes:
+      - ./bsf.yaml:/opt/open5gs/etc/open5gs/bsf.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    command: ["./entrypoint.sh", "open5gs-bsfd"]
+    networks:
+      - open5gs-test
+
+  # AMF - Access and Mobility Management Function
+  amf:
+    image: adaptive/open5gs:1.0
+    container_name: test_amf
+    depends_on:
+      - nrf
+      - ausf
+      - udm
+      - nssf
+      - pcf
+    volumes:
+      - ./amf.yaml:/opt/open5gs/etc/open5gs/amf.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    command: ["./entrypoint.sh", "open5gs-amfd"]
+    networks:
+      - open5gs-test
+
+  # SMF - Session Management Function
+  smf:
+    image: adaptive/open5gs:1.0
+    container_name: test_smf
+    depends_on:
+      - nrf
+      - udr
+      - pcf
+    volumes:
+      - ./smf.yaml:/opt/open5gs/etc/open5gs/smf.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    command: ["./entrypoint.sh", "open5gs-smfd"]
+    networks:
+      - open5gs-test
+
+  # UPF - User Plane Function
+  upf:
+    image: adaptive/open5gs:1.0
+    container_name: test_upf
+    depends_on:
+      - smf
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./upf.yaml:/opt/open5gs/etc/open5gs/upf.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    environment:
+      - ENABLE_NAT=true
+    command: ["./entrypoint.sh", "open5gs-upfd"]
+    networks:
+      - open5gs-test
+
+  upf2:
+    image: adaptive/open5gs:1.0
+    container_name: test_upf2
+    depends_on:
+      - smf
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./upf2.yaml:/opt/open5gs/etc/open5gs/upf.yaml
+      - ./entrypoint.sh:/opt/open5gs/bin/entrypoint.sh
+    environment:
+      - ENABLE_NAT=true
+    command: ["./entrypoint.sh", "open5gs-upfd"]
+    networks:
+      - open5gs-test
+
+  # Web UI for subscriber management
+  webui:
+    image: adaptive/open5gs-webui:1.0
+    container_name: test_webui
+    depends_on:
+      - mongodb
+    environment:
+      - DB_URI=mongodb://root:password@mongodb:27017/open5gs?authSource=admin
+    ports:
+      - "3000:3000"
+    networks:
+      - open5gs-test
+
+volumes:
+  mongodb_data:
+
+networks:
+  open5gs-test:
+    name: open5gs-test
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/24

@@ -1,0 +1,24 @@
+# Core GUI Framework
+PyQt5>=5.15.0
+
+# Configuration and Data Handling
+PyYAML>=5.4.0
+
+# Additional GUI Enhancements
+pyqtgraph==0.13.3
+QDarkStyle==3.2.3
+
+# System and Utilities
+psutil==5.9.6
+requests==2.31.0
+lxml>=4.6.0
+Pillow>=8.0.0
+matplotlib>=3.3.0
+networkx>=2.5
+
+# Development Dependencies (install with: pip install -r requirements.txt[dev])
+# pytest==7.4.3
+# pytest-qt==4.2.0
+# black==23.11.0
+# flake8==6.1.0
+# mypy==1.7.1
